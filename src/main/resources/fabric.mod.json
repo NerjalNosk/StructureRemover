@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "structure-remover",
+  "version": "${version}",
+  "name": "StructureRemover",
+  "description": "Remove structures from your world",
+  "authors": [
+    "\"Nerjal Nosk\""
+  ],
+  "contact": {
+    "repo": "https://github.com/NerjalNosk/StructureRemover"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.nerjal.structureremover.StructureRemover"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
