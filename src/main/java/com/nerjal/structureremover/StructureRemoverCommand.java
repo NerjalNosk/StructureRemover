@@ -18,6 +18,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +73,7 @@ public class StructureRemoverCommand {
             } catch (IllegalArgumentException e) {
                 vec = context.getSource().getPosition();
             }
-            BlockPos pos = new BlockPos(vec);
+            BlockPos pos = new BlockPos(new Vec3i((int) vec.x, (int) vec.y, (int) vec.z));
             list.forEach(struct ->
                     StructureRemover.removeStructure(context.getSource().getWorld(), pos, struct.value()));
         } catch (Exception e) {
