@@ -1,6 +1,6 @@
 # Structure Remover
 
-A small (server-side) mod adding one command and one method to remove a set structure from your world.
+A small (server-side) mod adding one command `/struct-rem <id> [<pos>]` and one method to remove a set structure from your world.
 
 [<img alt="Requires Fabric API" src="https://i.imgur.com/Ol1Tcf8.png" width="30%">](https://modrinth.com/mod/fabric-api)
 
