@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "structure-remover",
+  "id": "${mod_id}",
   "version": "${version}",
   "name": "StructureRemover",
   "description": "Remove structures from your world",
@@ -10,6 +10,7 @@
   "contact": {
     "repo": "https://github.com/NerjalNosk/StructureRemover"
   },
+  "icon": "assets/${mod_id}/icon.png",
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
