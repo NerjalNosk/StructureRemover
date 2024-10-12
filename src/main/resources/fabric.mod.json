@@ -14,13 +14,12 @@
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.nerjal.structureremover.StructureRemover"
-    ]
   },
+  "mixins": [
+    "structure-remover.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric": "*",
     "minecraft": ">=${minecraft_version}"
   }
 }
