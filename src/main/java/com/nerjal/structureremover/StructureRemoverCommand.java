@@ -11,7 +11,6 @@ import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.command.ServerCommandSource;
@@ -34,7 +33,7 @@ public class StructureRemoverCommand {
     private static final DynamicCommandExceptionType STRUCTURE_INVALID_EXCEPTION =
             new DynamicCommandExceptionType(id -> Text.translatable("commands.locate.structure.invalid", id));
 
-    static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> r = LiteralArgumentBuilder.literal("struct-rem");
         dispatcher.register(r
                 .requires(s -> s.hasPermissionLevel(2))
@@ -53,9 +52,10 @@ public class StructureRemoverCommand {
         Either<RegistryKey<Structure>, TagKey<Structure>> either = predicate.getKey();
         Function<RegistryKey<Structure>, Optional<RegistryEntryList.Direct<?>>> var10001 = key ->
                 structureRegistry.getEntry(key).map(entry ->
-                        RegistryEntryList.of(new RegistryEntry[]{entry})
+                        RegistryEntryList.of(entry)
             );
         Objects.requireNonNull(structureRegistry);
+        //noinspection unchecked
         return (Optional<RegistryEntryList.ListBacked<Structure>>)either.map(var10001, structureRegistry::getEntryList);
     }
 
@@ -75,7 +75,7 @@ public class StructureRemoverCommand {
             }
             BlockPos pos = new BlockPos(new Vec3i((int) vec.x, (int) vec.y, (int) vec.z));
             list.forEach(struct ->
-                    StructureRemover.removeStructure(context.getSource().getWorld(), pos, struct.value()));
+                    StructureRemover.removeStructure(context.getSource().getWorld(), pos, struct.comp_349()));
         } catch (Exception e) {
             StructureRemover.LOGGER.error(e);
             throw e;
