@@ -3,8 +3,11 @@ package com.nerjal.structureremover;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.command.argument.RegistryPredicateArgumentType;
 import net.minecraft.command.argument.Vec3ArgumentType;
@@ -18,6 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,6 +42,22 @@ public class StructureRemoverCommand {
         dispatcher.register(r
                 .requires(s -> s.hasPermissionLevel(2))
                 .then(argument("structure", registryPredicate(RegistryKeys.STRUCTURE))
+                        .suggests((ctx, builder) -> {
+                            ServerCommandSource source = ctx.getSource();
+                            Vec3d pos = source.getPosition();
+                            Registry<Structure> reg = source.getServer().getRegistryManager().get(RegistryKeys.STRUCTURE);
+                            StringRange range = StringRange.between(builder.getStart(), builder.getInput().length());
+                            Chunk chunk = source.getWorld().getChunk(BlockPos.ofFloored(pos));
+                            chunk.getStructureReferences().keySet().stream().map(
+                                    s -> reg.getKey(s)
+                                            .map(k -> k.getValue().toString())
+                                            .orElse(null))
+                                    .filter(Objects::nonNull).forEach(builder::suggest);
+                            if (ctx.getNodes().getLast().getNode() instanceof ArgumentCommandNode<?,?> node) {
+                                node.getType().listSuggestions(ctx, builder);
+                            }
+                            return builder.buildFuture();
+                        })
                         .executes(StructureRemoverCommand::remove)
                         .then(argument("location", Vec3ArgumentType.vec3())
                                 .executes(StructureRemoverCommand::remove)
